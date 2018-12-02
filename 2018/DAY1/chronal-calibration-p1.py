@@ -9,7 +9,8 @@ def main():
         freq_data = f.readlines()
     for fr in freq_data:
         freq = freq + int(fr)
-    print(freq)
+    print('Part 1 Answer: ' + str(freq))
+
 
 if __name__ == "__main__":
     main()
