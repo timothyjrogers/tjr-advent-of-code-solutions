@@ -5,7 +5,7 @@ __author__ = "Timothy J. Rogers"
 
 def main():
     freq = 0
-    with open('chronal-calibration-input.txt', 'r') as f:
+    with open('../chronal-calibration-input.txt', 'r') as f:
         freq_data = f.readlines()
     for fr in freq_data:
         freq = freq + int(fr)

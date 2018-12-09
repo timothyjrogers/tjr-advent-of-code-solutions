@@ -21,7 +21,7 @@ def letter_count(s):
 def main():
     twos = 0
     threes = 0
-    with open('inventory-management-system-input.txt', 'r') as f:
+    with open('../inventory-management-system-input.txt', 'r') as f:
         box_data = f.readlines()
     for box in box_data:
         twos_and_threes = letter_count(box)

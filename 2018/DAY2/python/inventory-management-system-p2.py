@@ -20,7 +20,7 @@ def print_common_chars(s1, s2):
 def main():
     box1 = None
     box2 = None
-    with open('inventory-management-system-input.txt', 'r') as f:
+    with open('../inventory-management-system-input.txt', 'r') as f:
         box_data = f.readlines()
     box_data = [x.strip('\n') for x in box_data]
     data_length = len(box_data)

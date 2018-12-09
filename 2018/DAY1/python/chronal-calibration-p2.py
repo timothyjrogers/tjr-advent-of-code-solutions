@@ -7,7 +7,7 @@ def main():
     freq = 0
     freqs = set([freq])
     p2_answer = None
-    with open('chronal-calibration-input.txt', 'r') as f:
+    with open('../chronal-calibration-input.txt', 'r') as f:
         freq_data = f.readlines()
     while p2_answer == None:
         for fr in freq_data:
