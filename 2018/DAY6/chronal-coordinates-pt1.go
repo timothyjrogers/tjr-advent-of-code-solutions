@@ -20,8 +20,7 @@ func intsToPointString(x int, y int) string {
 	return x_string + ", " + y_string
 }
 
-func getNonInfinitePoints(points []point) ([]point, int, int, int, int) {
-	var nonInfinitePoints []point
+func getBounds(points []point) (int, int, int, int) {
 	min_x, min_y := 100000000000000, 100000000000000
 	max_x, max_y := -100000000000000, -100000000000000
 	for _, v := range points {
@@ -30,24 +29,43 @@ func getNonInfinitePoints(points []point) ([]point, int, int, int, int) {
 		if v.y < min_y { min_y = v.y }
 		if v.y > max_y { max_y = v.y }
 	}
-	for _, v := range points {
-		if v.x > min_x && v.x < max_x && v.y > min_y && v.y < max_y {
-			nonInfinitePoints = append(nonInfinitePoints, v)
-		}
-	}
-	return nonInfinitePoints, max_x, max_y, min_x, min_y
+	return max_x, max_y, min_x, min_y
+}
+
+func getCenter(x_max int, y_max int, x_min int, y_min int) (int, int) {
+	x_mid := x_min + ((x_max - x_min) / 2)
+	y_mid := y_min + ((y_max - y_min) / 2)
+	return x_mid, y_mid
+}
+
+func isEdgePoint(p point, max_x int, max_y int, min_x int, min_y int) bool {
+	return p.x == max_x || p.x == min_x || p.y == max_y || p.y == min_y
 }
 
 func manhattanDist(p1 point, p2 point) int {
 	return int(math.Abs(float64(p1.x) - float64(p2.x))) + int(math.Abs(float64(p1.y) - float64(p2.y)))
 }
 
-func isOrigin(points []point, x int, y int) bool {
-	origin := false
+func removeSeenPoints(points []point, exclude map[string]bool) []point {
+	var newPoints []point
 	for _, p := range points {
-		if p.x == x && p.y == y { origin = true }
+		if _, ok := exclude[p.stringRep]; !ok { newPoints = append(newPoints, p)}
 	}
-	return origin
+	return newPoints
+}
+
+func getAdjacentPoints(p point, exclude map[string]bool) []point {
+	var points []point
+	points = append(points, point{x: p.x + 1, y: p.y, stringRep: intsToPointString(p.x + 1, p.y)})
+	points = append(points, point{x: p.x - 1, y: p.y, stringRep: intsToPointString(p.x - 1, p.y)})
+	points = append(points, point{x: p.x, y: p.y + 1, stringRep: intsToPointString(p.x, p.y + 1)})
+	points = append(points, point{x: p.x, y: p.y - 1, stringRep: intsToPointString(p.x, p.y - 1)})
+	points = append(points, point{x: p.x + 1, y: p.y + 1, stringRep: intsToPointString(p.x + 1, p.y + 1)})
+	points = append(points, point{x: p.x + 1, y: p.y - 1, stringRep: intsToPointString(p.x + 1, p.y - 1)})
+	points = append(points, point{x: p.x - 1, y: p.y + 1, stringRep: intsToPointString(p.x - 1, p.y + 1)})
+	points = append(points, point{x: p.x - 1, y: p.y - 1, stringRep: intsToPointString(p.x - 1, p.y - 1)})
+	points = removeSeenPoints(points, exclude)
+	return points
 }
 
 func main() {
@@ -64,36 +82,48 @@ func main() {
 		pointsInput = append(pointsInput, p	)
 	}
 
-	nonInfinitePoints, x_max, y_max, x_min, y_min := getNonInfinitePoints(pointsInput)
-	var extraInfinitePoints []point
-	closestPointsToX := make(map[string]int)
+	x_max, y_max, x_min, y_min := getBounds(pointsInput)
+	midpoint_x, midpoint_y := getCenter(x_max, y_max, x_min, y_min)
+	midpoint := point{x: midpoint_x, y: midpoint_y, stringRep: intsToPointString(midpoint_x, midpoint_y)}
 
-	for i := x_min; i <= x_max; i++ {
-		for j := y_min; j <= y_max; j++ {
-			var closestOrigin point
-			var closestOriginDist = 100000000000000
-			mdistSeen := make(map[int]int)
-			for _, p := range pointsInput {
-				mdist := manhattanDist(p, point{x: i, y: j, stringRep: intsToPointString(i, j)})
-				if _, ok := mdistSeen[mdist]; ok { mdistSeen[mdist] = mdistSeen[mdist] + 1} else { mdistSeen[mdist] = 1 }
-				if mdist < closestOriginDist {
-					closestOriginDist = mdist
-					closestOrigin = p
-				}
+	infinitePoints := make(map[string]bool)
+	closestPointsToX := make(map[string]int)
+	seenPoints := make(map[string]bool)
+
+	var searchStack []point
+	searchStack = append(searchStack, midpoint)
+	for len(searchStack) > 0 {
+		searchPoint := searchStack[len(searchStack) - 1]
+		searchStack = searchStack[:len(searchStack) - 1]
+		if _, ok := seenPoints[searchPoint.stringRep]; ok { continue }
+		maxDist := 100000000000000
+		var maxDistPoint point
+		seenDistances := make(map[int]int)
+		for _, origin := range pointsInput {
+			mdist := manhattanDist(searchPoint, origin)
+			if _, ok := seenDistances[mdist]; ok { seenDistances[mdist] += 1 } else { seenDistances[mdist] = 1 }
+			if mdist < maxDist {
+				maxDist = mdist
+				maxDistPoint = origin
 			}
-			if mdistSeen[closestOriginDist] == 1 {
-				if _, ok := closestPointsToX[closestOrigin.stringRep]; ok { closestPointsToX[closestOrigin.stringRep] += 1 } else { closestPointsToX[closestOrigin.stringRep] = 1 }
-			}
-			if i == x_max || j == y_max { extraInfinitePoints = append(extraInfinitePoints, closestOrigin) }
 		}
+		if isEdgePoint(searchPoint, x_max, y_max, x_min, y_min) {
+			infinitePoints[maxDistPoint.stringRep] = true
+			continue 
+		} else if seenDistances[maxDist] == 1 {
+			if _, ok := closestPointsToX[maxDistPoint.stringRep]; ok { closestPointsToX[maxDistPoint.stringRep] += 1} else { closestPointsToX[maxDistPoint.stringRep] = 1}
+		}
+		seenPoints[searchPoint.stringRep] = true
+		searchStack = append(searchStack, getAdjacentPoints(searchPoint, seenPoints)...)
 	}
 
 	maxArea := 0
-	for _, p := range nonInfinitePoints {
+	for _, p := range pointsInput {
+		pointString := p.stringRep
 		infinite := false
-		for _, i := range extraInfinitePoints { if i.stringRep == p.stringRep { infinite = true }}
+		if _, ok := infinitePoints[pointString]; ok { infinite = true }
 		if infinite { continue }
-		if closestPointsToX[p.stringRep] > maxArea { maxArea = closestPointsToX[p.stringRep] }
+		if closestPointsToX[pointString] > maxArea { maxArea = closestPointsToX[pointString] }
 	}
 	fmt.Println(maxArea)
 }
