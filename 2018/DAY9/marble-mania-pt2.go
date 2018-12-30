@@ -2,6 +2,15 @@ package main
 
 import ("fmt"; "os"; "bufio"; "strings"; "strconv")
 
+type Marble struct {
+	score int
+	next *Marble
+	prev *Marble
+}
+func (m *Marble) getScore() int {
+	return m.score
+}
+
 func main() {
 	//initialize file access for input
 	inputPath := "marble-mania-input.txt"
@@ -17,44 +26,31 @@ func main() {
 	for i := 1; i <= numPlayers; i++ { players[i] = 0 }
 	
 	numMarbles, _ := strconv.Atoi(data[6])
-	numMarbles = numMarbles * 100
-	marbles := make([]int, 1)
-	marbles[0] = 0
+	numMarbles = numMarbles
 
-	curMarble := 0
+	curMarble := &Marble{score: 0, next: nil, prev: nil}
+	curMarble.next = curMarble
+	curMarble.prev = curMarble
+
 	for i := 1; i <= numMarbles; i++ {
 		curPlayer := i % numPlayers
 		if i % 23 == 0 {
 			players[curPlayer] += i
-			nextMarble := curMarble - 7
-			if nextMarble < 0 { nextMarble += len(marbles) }
-			players[curPlayer] += marbles[nextMarble]
-			if nextMarble == 0 { 
-				marbles = marbles[1:]
-			} else if nextMarble == len(marbles) - 1 {
-				marbles = marbles[:len(marbles) - 1]
-			} else {
-				marbles = append(marbles[:nextMarble], marbles[nextMarble+1:]...)
-			}
-			//nextMarble += 1
-			//if nextMarble >= len(marbles) { nextMarble = nextMarble - len(marbles) }
-			curMarble = nextMarble
+			for i := 0; i < 6; i++ { curMarble = curMarble.prev }
+			fmt.Println(curMarble.getScore())
+			players[curPlayer] += curMarble.getScore()
+			curMarble.prev.next = curMarble.next
+			curMarble.next.prev = curMarble.prev
+			curMarble = curMarble.next
 			continue
 		}
-		newMarbles := make([]int, len(marbles)+1)
-		nextMarble := curMarble + 2
-		if nextMarble > len(marbles) { nextMarble = nextMarble - len(marbles) }
-		if nextMarble == 0 { nextMarble = len(marbles) }
-		if nextMarble == len(marbles) {
-			newMarbles = append(marbles, i)
-		} else {
-			newMarbles = make([]int, len(marbles)+1)
-			copy(newMarbles[:nextMarble], marbles[:nextMarble])
-			newMarbles[nextMarble] = i
-			copy(newMarbles[nextMarble+1:], marbles[nextMarble:])
-		}
-		marbles = newMarbles
-		curMarble = nextMarble
+		newMarble := &Marble{score: i, next: nil, prev: nil}
+		curMarble = curMarble.next
+		tempMarble := curMarble.next
+		curMarble.next = newMarble
+		newMarble.prev = curMarble
+		newMarble.next = tempMarble
+		curMarble = curMarble.next
 	}
 
 	maxScore := 0
