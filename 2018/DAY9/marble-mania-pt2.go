@@ -23,6 +23,7 @@ func main() {
 	for i := 1; i <= numPlayers; i++ { players[i] = 0 }
 	
 	numMarbles, _ := strconv.Atoi(data[6])
+	numMarbles *= 100
 	
 	curMarble := &marble{score: 0, next: nil, prev: nil}
 	curMarble.next = curMarble
@@ -40,9 +41,11 @@ func main() {
 			curMarble = curMarble.next
 			continue
 		}
+		curMarble = curMarble.next
 		nextMarble := &marble{score: i, next: curMarble.next, prev: curMarble}
 		curMarble.next.prev = nextMarble
 		curMarble.next = nextMarble
+		curMarble = curMarble.next
 	}
 
 	maxScore := 0
