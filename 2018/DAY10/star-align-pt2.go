@@ -60,8 +60,9 @@ func main() {
 
 	max_x, max_y, min_x, min_y := getBounds(points)
 	area := (max_x - min_x) * (max_y - min_y)
-	
+	time := 0
 	for true {
+		time += 1
 		for _, p := range points {
 			p.updatePosX()
 			p.updatePosY()
@@ -72,23 +73,5 @@ func main() {
 		area = newArea
 	}
 
-
-	for _, p := range points {
-		p.reverseUpdatePosX()
-		p.reverseUpdatePosY()
-	}
-	max_x, max_y, min_x, min_y = getBounds(points)
-	screen := make([][]string, max_y+1)
-	for i := range screen {
-		screen[i] = make([]string, max_x+1)
-		for j := range screen[i] {
-			screen[i][j] = "-"
-		}
-	}
-	for _, p := range points {
-		screen[p.pos_y][p.pos_x] = "#"
-	}
-	for i := range screen {
-		fmt.Println(screen[i])
-	}
+	fmt.Println(time - 1)
 }
