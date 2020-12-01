@@ -23,7 +23,7 @@ fn main() {
         }
     }
 
-    for i in 0..vec.len() {
+    for i in 0..vec.len()-1 {
         for j in i+1..vec.len() {
             if vec[i] + vec[j] == 2020 {
                 println!("Entries: {}, {}", vec[i], vec[j]);
