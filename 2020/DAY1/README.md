@@ -1,0 +1,3 @@
+# Day 1: Report Repair
+
+This solution uses a simple iterate and compare approach for both parts. The input data is stored in data/input.txt for convenience and versionability -- the individual entries are loaded using Rust's built in BufferedReader and stored in a Vec. The answer calculation is performed via nested for loops that iterate over every combination of two or three elements for parts 1 and 2 respectively. Execution is halted when an appropriate set of entries is found and the solution is printed.
