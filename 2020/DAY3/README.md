@@ -1,0 +1,3 @@
+# Day 3: Toboggan Trajectory
+
+Day 3 uses the same input parsing as Day 2 to read the input data into a vector of strings. The 'bottom' of the slope is calculated as the length of the vector and then the vector is iterated with a step size of the slope y-value provided in the puzzle with the initial x-y coordinate set to the offsets from the puzzle. On each loop the appropriate position in the row is checked against the tree (#) character; the x-coordinate is incremented by the x-value provided in the puzzle then modulus'd against the row length to account for the rightward repeating nature of the puzzle input.
