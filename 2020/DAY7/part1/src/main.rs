@@ -6,9 +6,13 @@ fn parse_vals(vals: String) -> Vec<String> {
     let items: Vec<String> = vals.split(",").map(|x| x.trim().to_string()).collect();
     let mut res: Vec<String> = vec![];
     for item in items {
-        let start = item.find(" ").unwrap() + 1 as usize;
-        let end = item.find(" bag").unwrap();
-        res.push(item[start..end].to_string());
+        if item == "no other bags." {
+            return vec![];
+        } else {
+            let start = item.find(" ").unwrap() + 1 as usize;
+            let end = item.find(" bag").unwrap();
+            res.push(item[start..end].to_string());
+        }
     }
     return res;
 }
@@ -36,7 +40,9 @@ fn main() {
     for v in vec {
         let kv: Vec<String> = v.split("bags contain").map(|x| x.to_string()).collect();
         let vals: Vec<String> = parse_vals(kv[1].to_string());
-        bag_map.insert(kv[0].trim().to_string(), vals.clone());
+        if vals.len() > 0 {
+            bag_map.insert(kv[0].trim().to_string(), vals.clone());
+        }
     }
 
     let mut sum = 0;
