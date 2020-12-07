@@ -1,0 +1,5 @@
+[package]
+name = "d7p2"
+version = "1.0.0"
+authors = ["Timothy Rogers <rogers.timothy.john@gmail.com>"]
+edition = "2018"
