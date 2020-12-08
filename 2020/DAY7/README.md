@@ -1,6 +1,6 @@
-# Day 7: Handy Haversacks
+# [Day 7: Handy Haversacks](https://adventofcode.com/2020/day/7)
 
-This one was fun -- it required some creative string parsing to get the input into a useful data structure. I was never great at recursion in school so I'm pretty pleased with how this turned out.
+This one was fun, and not just because of the D&D reference. It required some creative string parsing to get the input into a useful data structure and I was never great at recursion in school so I'm pretty pleased with how this turned out.
 
 Both parts follow the standard pattern of reading the input file into a vector of strings. Both parts utilize std::collections::HashMap to create a lookup table.
 

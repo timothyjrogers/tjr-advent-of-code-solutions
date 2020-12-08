@@ -1,4 +1,4 @@
-# Day 4: Passport Processing
+# [Day 4: Passport Processing](https://adventofcode.com/2020/day/4)
 
 The code is a little messy on this one because I got busy and rushed through it a day late, will circle back to clean up later.
 

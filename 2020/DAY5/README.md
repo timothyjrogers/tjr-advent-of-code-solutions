@@ -1,4 +1,4 @@
-# Day 5: Binary Boarding
+# [Day 5: Binary Boarding](https://adventofcode.com/2020/day/5)
 
 This one was pretty straight forward but a fun little exercise in binary numbers. The boarding pass code is just a binary number with the following letter-to-digit mapping:
 
