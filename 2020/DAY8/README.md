@@ -1,0 +1,5 @@
+# [Day 8: Handheld Halting](https://adventofcode.com/2020/day/8)
+
+This one was pretty easy but I didn't bother optimizing it, I suspect there are some interesting things you could do to optimize part 2. Part 1 -- very straight forward -- loops through the input vector with a program counter, modifying it as needed based on the instruction. An accumulator value is kept outside the loop to track ```acc``` results. A [std::collections::HashSet](https://doc.rust-lang.org/std/collections/struct.HashSet.html) tracks unique instructions (e.g. "jmp +2") to detect repeats; if a repeat is found the loop breaks.
+
+For part 2 the program-running loop from part 1 is pulled into a function so that it can be run repeatedly. Now when looping through the input vector, anytime a ```nop``` or ```jmp``` instruction is found it is modified to the other and the ```run_program``` function is called with the modified vector copy. If it terminates it returns the final accumulator and the day 8 program halts; if the modified program still has an infinite loop then it is discarded and the main program continues on.
