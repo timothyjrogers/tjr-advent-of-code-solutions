@@ -5,9 +5,7 @@ use std::collections::HashMap;
 const FNAME: &str = "../data/input.txt";
 
 fn get_fuel(steps: u32) -> u32 {
-    let mut fuel = 0;
-    for i in 1..=steps { fuel += i }
-    return fuel;
+    return (steps*steps + steps)/2;
 }
 
 fn main() {
