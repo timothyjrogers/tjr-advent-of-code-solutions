@@ -114,7 +114,7 @@ fn main() {
         .collect::<Result<_, _>>()
         .unwrap();
 
-    let mut number: Vec<String> = lines[0].chars().map(|x| x.to_string()).collect();    
+    let mut number: Vec<String> = lines[0].chars().map(|x| x.to_string()).collect();
     for line in &lines[1..] {
         let mut new_number = vec![String::from("[")];
         new_number.append(&mut number);
