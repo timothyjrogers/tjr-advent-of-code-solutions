@@ -10,16 +10,6 @@ import (
 
 const input_file string = "input.txt"
 
-func intSliceMax(vals []int) int {
-	max := 0
-	for _, v := range vals {
-		if v > max {
-			max = v
-		}
-	}
-	return max
-}
-
 func partOne(lines []string) {
 	width := len(lines[0])
 	height := len(lines)
