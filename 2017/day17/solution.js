@@ -17,3 +17,17 @@ for (let i = 1; i <= 2017; i++) {
     cur++;
 }
 console.log(`Part one: ${lock[cur+1]}`);
+
+let size = 1;
+let pos = 0;
+let res = 0;
+for (let i = 1; i <= 50000000; i++) {
+    let newPos = (pos + input) % size;
+    newPos++;
+    if (newPos == 1) {
+        res = i;
+    }
+    size++;
+    pos = newPos;
+}
+console.log(`Part two: ${res}`);
