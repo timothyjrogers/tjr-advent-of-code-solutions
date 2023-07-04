@@ -17,15 +17,11 @@ Object.keys(depths).forEach(l => {
     layers[l] = 0;
 });
 let pos = -1;
-console.log(depths);
 let severity = 0;
-console.log(layers);
 for (var i = 0; i <= numLayers; i++) {
     pos++;
-    console.log(pos);
     if (layers[pos] != undefined) {
         if (layers[pos] == 0) {
-            console.log(`Caught in layer ${pos}, depth ${depths[pos]}`);
             severity += pos * depths[pos];
         }
     }
@@ -41,6 +37,24 @@ for (var i = 0; i <= numLayers; i++) {
             }
         }
     }
-    console.log(layers);
 }
 console.log(`Part one: ${severity}`);
+
+let delay = 0;
+while (true) {
+    let caught = false;
+    for (let i = 0; i <= numLayers; i++) {
+        if (depths[i]) {
+            let offset = (delay + i) % ((depths[i] - 1) * 2);
+            if (offset == 0) {
+                caught = true;
+                break;
+            }
+        }
+    }
+    if (!caught) {
+        console.log(`Part two: ${delay}`);
+        break;
+    }
+    delay++;
+}
