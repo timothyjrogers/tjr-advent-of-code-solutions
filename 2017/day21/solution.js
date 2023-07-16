@@ -28,7 +28,7 @@ function flip(grid) {
     return newGrid;
 }
 
-let image = [".#.", "..#", "###"];
+let image = [[".","#","."], [".",".","#"], ["#","#","#"]];
 for (let i = 0; i < 5; i++) {
 
 }
