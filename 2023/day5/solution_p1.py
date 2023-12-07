@@ -10,7 +10,7 @@ i = 1
 cur_map = ''
 while i < len(data):
     line = data[i]
-    if line == '':
+    if line == ''
         cur_map = ''
     elif not line[0].isdigit():
         map_name = line.split(' ')[0]
